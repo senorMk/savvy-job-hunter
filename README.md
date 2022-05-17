@@ -6,9 +6,6 @@ Simple Job Crawler. Stack: MongoDB, Expressjs, React, NodeJS
 </p>
 
 <p align="center">
-   <a href="https://travis-ci.com/senorMk/JobCrawler">
-      <img src="https://travis-ci.com/senorMk/JobCrawler.svg?branch=master" />
-   </a>
    <a href="https://github.com/senorMk/JobCrawler/blob/master/LICENSE">
       <img src="https://img.shields.io/badge/License-MIT-green.svg" />
    </a>
