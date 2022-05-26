@@ -41,7 +41,7 @@ const doScanJobs = async () => {
             let response = await page.goto(
               `https://gozambiajobs.com/jm-ajax/get_listings/?&per_page=${jobsPerPage}&page=${i}`,
               {
-                waitUntil: "networkidle0",
+                waitUntil: "networkidle2",
               }
             );
 
