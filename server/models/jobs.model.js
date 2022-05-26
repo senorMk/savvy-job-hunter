@@ -48,34 +48,33 @@ JobsModel.getAll = async (req, res) => {
   query.skip = size * (pageNo - 1);
   query.limit = size;
 
-  let response = await JobsModel.countDocuments({}).then(async function (
-    totalCount,
-    error
-  ) {
-    let response = {};
-
-    if (error) {
-      response = { error: true, message: "Error counting documents data" };
-      res.json(response);
-    }
-
-    JobsModel.find({}, {}, query, function (err, data) {
+  let response = await JobsModel.countDocuments({ verified: true }).then(
+    async function (totalCount, error) {
       let response = {};
-      if (err) {
-        response = { error: true, message: "Error fetching data" };
-      } else {
-        let totalPages = Math.ceil(totalCount / size);
-        response = {
-          error: false,
-          message: data,
-          pages: totalPages,
-          count: totalCount,
-        };
+
+      if (error) {
+        response = { error: true, message: "Error counting documents data" };
+        res.json(response);
       }
 
-      res.json(response);
-    }).sort({ created: "desc" });
-  });
+      JobsModel.find({ verified: true }, {}, query, function (err, data) {
+        let response = {};
+        if (err) {
+          response = { error: true, message: "Error fetching data" };
+        } else {
+          let totalPages = Math.ceil(totalCount / size);
+          response = {
+            error: false,
+            message: data,
+            pages: totalPages,
+            count: totalCount,
+          };
+        }
+
+        res.json(response);
+      }).sort({ created: "desc" });
+    }
+  );
 
   return response;
 };
