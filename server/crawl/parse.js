@@ -21,7 +21,11 @@ const doParseJobs = async () => {
       .then(async (browser) => {
         const page = await browser.newPage();
 
+        await page.setJavaScriptEnabled(true);
         await page.setDefaultNavigationTimeout(0);
+        await page.setUserAgent(
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
+        );
 
         logger.info("Searching db.");
 
@@ -112,7 +116,7 @@ const doParseJobs = async () => {
   }
 };
 
-const parseJobs = new CronJob.CronJob("*/2 * * * *", async () => {
+const parseJobs = new CronJob.CronJob("*/10 * * * *", async () => {
   await doParseJobs();
 });
 

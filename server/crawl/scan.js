@@ -131,7 +131,7 @@ const doScanJobs = async () => {
   }
 };
 
-const scanJobs = new CronJob.CronJob("*/2 * * * *", async () => {
+const scanJobs = new CronJob.CronJob("*/10 * * * *", async () => {
   await doScanJobs();
 });
 
