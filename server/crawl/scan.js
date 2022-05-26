@@ -23,6 +23,9 @@ const doScanJobs = async () => {
 
         await page.setJavaScriptEnabled(true);
         await page.setDefaultNavigationTimeout(0);
+        await page.setUserAgent(
+          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
+        );
 
         const jobListingItem = "job_listing";
 
@@ -45,7 +48,7 @@ const doScanJobs = async () => {
               }
             );
 
-            logger.info(response);
+            console.log(response);
 
             let json = await response.json();
 
