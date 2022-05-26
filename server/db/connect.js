@@ -9,7 +9,7 @@ const connectToDb = async () => {
     await Mongoose.connect(config.dbConnectUrl);
     logger.info("Connected to MongoDB !");
   } catch (err) {
-    logger.error("Could not connect to MongoDB !");
+    logger.error(`Could not connect to MongoDB ! Url: ${config.dbConnectUrl}`);
   }
 };
 
