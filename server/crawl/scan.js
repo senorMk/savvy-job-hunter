@@ -15,6 +15,7 @@ const doScanJobs = async () => {
       .launch({
         headless: true,
         args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        dumpio: true,
       })
       .then(async (browser) => {
         logger.info("Crawling jobs...");
@@ -47,7 +48,13 @@ const doScanJobs = async () => {
 
             let json = await response.json();
 
+            console.log("1. Response: ", response);
+
+            console.log("2. JSON: ", json);
+
             let html = json.html;
+
+            console.log("3. HTML: ", html);
 
             await page.setContent(html);
 
