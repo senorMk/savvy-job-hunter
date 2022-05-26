@@ -14,7 +14,10 @@ const doParseJobs = async () => {
     puppeteer.use(StealthPlugin());
 
     let res = puppeteer
-      .launch({ headless: true, args: ["--no-sandbox"] })
+      .launch({
+        headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+      })
       .then(async (browser) => {
         const page = await browser.newPage();
 

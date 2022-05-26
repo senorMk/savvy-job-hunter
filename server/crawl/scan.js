@@ -14,6 +14,7 @@ const doScanJobs = async () => {
     puppeteer
       .launch({
         headless: true,
+        args: ["--no-sandbox", "--disable-setuid-sandbox"],
       })
       .then(async (browser) => {
         logger.info("Crawling jobs...");
