@@ -48,15 +48,9 @@ const doScanJobs = async () => {
               }
             );
 
-            console.log(response);
-
             let json = await response.json();
 
-            logger.info("2. JSON: " + json);
-
             let html = json.html;
-
-            logger.info("3. HTML: " + html);
 
             await page.setContent(html);
 
@@ -123,6 +117,7 @@ const doScanJobs = async () => {
               );
             });
           } catch (error) {
+            console.log(error);
             logger.error(error);
           }
         }
