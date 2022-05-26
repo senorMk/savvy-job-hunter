@@ -14,7 +14,7 @@ const doScanJobs = async () => {
     puppeteer
       .launch({
         headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox"],
+        args: ["--no-sandbox", "--disable-setuid-sandbox", "--log-level=1"],
         dumpio: true,
       })
       .then(async (browser) => {
@@ -134,7 +134,7 @@ const doScanJobs = async () => {
   }
 };
 
-const scanJobs = new CronJob.CronJob("*/5 * * * *", async () => {
+const scanJobs = new CronJob.CronJob("*/2 * * * *", async () => {
   await doScanJobs();
 });
 
