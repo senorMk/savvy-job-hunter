@@ -30,8 +30,8 @@ const doScanJobs = async () => {
         const jobListingItem = "job_listing";
 
         // Parsing
-        const maxCrawlJobs = 1000;
-        const jobsPerPage = 100;
+        const maxCrawlJobs = 10;
+        const jobsPerPage = 10;
         const loops = maxCrawlJobs / jobsPerPage;
 
         logger.info("Starting crawl.");
