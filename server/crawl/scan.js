@@ -45,7 +45,7 @@ const doScanJobs = async () => {
               }
             );
 
-            logger.info("1. Response: " + response);
+            logger.info(response);
 
             let json = await response.json();
 
