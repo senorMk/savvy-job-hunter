@@ -1,5 +1,6 @@
 import Mongoose from "mongoose";
 import logger from "../core/logger/app-logger.js";
+import config from "../core/config/config.dev.js";
 import JobsModel from "../models/jobs.model.js";
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
@@ -30,8 +31,8 @@ const doScanJobs = async () => {
         const jobListingItem = "job_listing";
 
         // Parsing
-        const maxCrawlJobs = 10;
-        const jobsPerPage = 10;
+        const maxCrawlJobs = config.maxCrawlJobs;
+        const jobsPerPage = config.jobsPerPage;
         const loops = maxCrawlJobs / jobsPerPage;
 
         logger.info("Starting crawl.");
