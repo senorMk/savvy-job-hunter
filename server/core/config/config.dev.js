@@ -20,6 +20,7 @@ config.dbConnectUrl = `mongodb+srv://${config.dbUser}:${config.dbPass}@${config.
 config.serverPort = process.env.PORT;
 config.maxCrawlJobs = process.env.MAX_CRAWL_JOBS || 10;
 config.jobsPerPage = process.env.JOBS_PER_PAGE || 10;
+config.minsPerCrawl = process.env.MINS_PER_CRAWL || 10;
 config.frontDir = path.resolve(
   path.join(__dirname, "../../../client/build/index.html")
 );

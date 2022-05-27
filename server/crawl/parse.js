@@ -116,8 +116,11 @@ const doParseJobs = async () => {
   }
 };
 
-const parseJobs = new CronJob.CronJob("*/10 * * * *", async () => {
-  await doParseJobs();
-});
+const parseJobs = new CronJob.CronJob(
+  `*/${config.minsPerCrawl} * * * *`,
+  async () => {
+    await doParseJobs();
+  }
+);
 
 export default parseJobs;

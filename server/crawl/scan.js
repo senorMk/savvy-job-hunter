@@ -132,8 +132,11 @@ const doScanJobs = async () => {
   }
 };
 
-const scanJobs = new CronJob.CronJob("*/10 * * * *", async () => {
-  await doScanJobs();
-});
+const scanJobs = new CronJob.CronJob(
+  `*/${config.minsPerCrawl} * * * *`,
+  async () => {
+    await doScanJobs();
+  }
+);
 
 export default scanJobs;
