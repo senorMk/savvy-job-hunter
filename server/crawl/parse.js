@@ -1,5 +1,6 @@
 import Mongoose from "mongoose";
 import logger from "../core/logger/app-logger.js";
+import config from "../core/config/config.dev.js";
 import JobsModel from "../models/jobs.model.js";
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
