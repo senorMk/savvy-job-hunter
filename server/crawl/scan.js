@@ -95,7 +95,9 @@ const doScanJobs = async () => {
                   verified,
                 };
 
-                CleanArray.push(new_job);
+                if (jobType !== "Advert") {
+                  CleanArray.push(new_job);
+                }
               });
 
               return CleanArray;
