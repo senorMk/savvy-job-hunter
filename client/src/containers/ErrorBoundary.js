@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Typography, Button } from "@mui/material";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
+import { Box, Container, Button, Typography } from "@mui/material";
 import SentimentDissatisfiedOutlinedIcon from "@mui/icons-material/SentimentDissatisfiedOutlined";
 import toast from "react-hot-toast";
 

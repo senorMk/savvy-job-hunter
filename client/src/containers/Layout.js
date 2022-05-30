@@ -1,19 +1,13 @@
-import './Layout.css';
+import { Box, Container } from "@mui/material";
+import Header from "./Header";
 import React from "react";
 
 const Layout = ({ children }) => {
   return (
-    <>
-      <header className="App-header">
-          <h1>Header</h1>
-      </header>
-      <div className="Layout-body">
-          <main>{children}</main>
-      </div>
-      <footer className="App-footer">
-          <h1>Footer</h1>
-      </footer>
-    </>
+    <Container maxWidth="false">
+      <Header />
+      <Box>{children}</Box>
+    </Container>
   );
 };
 

@@ -1,61 +1,66 @@
 import React, { useState, useEffect } from "react";
 import Axios from "axios";
 import config from "../config";
-import { Box, Grid } from "@mui/material";
+import { Box, Container, Stack } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import JobItem from "../components/JobItem";
 import JobInfo from "../components/JobInfo";
-import "./JobPage.css";
 
 const JobsPage = () => {
-  const [jobsList, setJobsList] = useState({});
+  const [jobsList, setJobsList] = useState();
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    let mounted = true;
-
     const getJobsList = async () => {
       let page = 1;
       let itemsPerPage = 10;
-      let response = await Axios.get(
-        `${config.SERVER}/api/v1/jobs/all?pageNo=${page}&size=${itemsPerPage}`
-      );
-
+      setLoading(true);
+      let response = {};
+      try {
+        response = await Axios.get(
+          `${config.SERVER}/api/v1/jobs/all?pageNo=${page}&size=${itemsPerPage}`
+        );
+      } catch (error) {
+        if (error?.response?.data) console.log(error?.response?.data);
+      }
+      setLoading(false);
       return response.data.message;
     };
 
     getJobsList().then((items) => {
-      if (mounted) {
+      if (items) {
         setJobsList(items);
       }
     });
-    return () => (mounted = false);
   }, []);
 
-  return (
-    <div className="main">
-      <div className="sidebar">
-        {jobsList.length > 0 ? (
-          <div>
-            <Box sx={{ flexGrow: 1 }}>
-              <Grid container spacing={1} columns={1}>
-                {jobsList.map((job) => {
-                  return (
-                    <Grid item xs={1} key={job._id}>
-                      <JobItem job={job} />
-                    </Grid>
-                  );
-                })}
-              </Grid>
-            </Box>
-          </div>
-        ) : (
-          <div>
-            <h5>No Jobs Found</h5>
-          </div>
-        )}
-      </div>
+  const showJobs = () => {
+    if (jobsList?.length > 0) {
+      return (
+        <Stack spacing={2}>
+          {jobsList.map((job) => (
+            <JobItem key={job._id} job={job} sx={{ padding: "10px" }} />
+          ))}
+        </Stack>
+      );
+    } else if (isLoading) {
+      return (
+        <Box alignItems="center">
+          <CircularProgress />
+        </Box>
+      );
+    }
+  };
 
-      <JobInfo />
-    </div>
+  return (
+    <Container sx={{ marginTop: "20px" }} maxWidth="false">
+      <Stack direction="row" spacing={2}>
+        <Stack direction="column" sx={{ minWidth: 500, maxWidth: 500 }}>
+          {showJobs()}
+        </Stack>
+        <JobInfo sx={{ minHeight: 1000 }} />
+      </Stack>
+    </Container>
   );
 };
 

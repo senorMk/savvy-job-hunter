@@ -1,22 +1,29 @@
 import React, { useState, useEffect } from "react";
-import "./JobInfo.css";
-import { Link, useParams } from "react-router-dom";
-import Typography from "@mui/material/Typography";
-import Paper from "@mui/material/Paper";
+import { useParams } from "react-router-dom";
+import { Box, Card, Container, Stack, Typography } from "@mui/material";
+import TouchAppIcon from "@mui/icons-material/TouchApp";
+import CircularProgress from "@mui/material/CircularProgress";
 import Axios from "axios";
 import config from "../config";
-
-const getJobsDetail = async (jobId) => {
-  let response = await Axios.get(`${config.SERVER}/api/v1/jobs/get/${jobId}`);
-
-  return response.data;
-};
 
 const JobInfo = () => {
   const [selectedJob, setJob] = useState({});
   const { jobId } = useParams();
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
+    const getJobsDetail = async (jobId) => {
+      setLoading(true);
+
+      let response = await Axios.get(
+        `${config.SERVER}/api/v1/jobs/get/${jobId}`
+      );
+
+      setLoading(false);
+
+      return response.data;
+    };
+
     if (jobId) {
       getJobsDetail(jobId).then((job) => {
         setJob(job);
@@ -24,41 +31,54 @@ const JobInfo = () => {
     }
   }, [jobId]);
 
-  return (
-    <div className="info">
-      <Paper className="body">
-        <Link to={`/jobs/${selectedJob._id}`}>
-          <Typography
-            sx={{ fontSize: 18 }}
-            align="left"
-            variant="h2"
-            gutterBottom
-          >
-            {selectedJob.position}
-          </Typography>
-        </Link>
+  return jobId ? (
+    <Card sx={{ padding: "10px" }}>
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
         <Typography
-          sx={{ fontSize: 18 }}
+          sx={{ fontSize: 24, fontWeight: "bold" }}
           align="left"
           variant="h2"
           gutterBottom
         >
-          {selectedJob.companyName} - {selectedJob.location}
+          {selectedJob.position}
         </Typography>
         <Typography
-          sx={{ fontSize: 14 }}
+          sx={{ fontSize: 22, fontStyle: "italic" }}
           align="left"
           variant="h2"
-          color="text.secondary"
           gutterBottom
         >
-          <div
-            contentEditable="true"
-            dangerouslySetInnerHTML={{ __html: selectedJob.jobDescriptionHtml }}
-          ></div>
+          {selectedJob.link ? new URL(selectedJob.link).hostname : ""}
         </Typography>
-      </Paper>
-    </div>
+      </Stack>
+      <Typography sx={{ fontSize: 18 }} align="left" variant="h2" gutterBottom>
+        {selectedJob.companyName}
+      </Typography>
+      <Typography sx={{ fontSize: 18 }} align="left" variant="h2" gutterBottom>
+        {selectedJob.location}
+      </Typography>
+      <Typography
+        sx={{ fontSize: 16 }}
+        align="left"
+        variant="body2"
+        gutterBottom
+      >
+        <div
+          dangerouslySetInnerHTML={{ __html: selectedJob.jobDescriptionHtml }}
+        ></div>
+      </Typography>
+    </Card>
+  ) : isLoading ? (
+    <Box alignItems="center">
+      <CircularProgress />
+    </Box>
+  ) : (
+    <Container align="center">
+      <TouchAppIcon sx={{ fontSize: "64px" }} />
+      <Typography variant="h2" sx={{ fontSize: "24px", marginTop: "10px" }}>
+        Please Select a job
+      </Typography>
+    </Container>
   );
 };
 

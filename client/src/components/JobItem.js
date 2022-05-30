@@ -1,43 +1,68 @@
-import Card from "@mui/material/Card";
-import { CardActionArea } from "@mui/material";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
 import { Link } from "react-router-dom";
+import moment from "moment";
+import {
+  Card,
+  CardContent,
+  CardActionArea,
+  Stack,
+  Typography,
+} from "@mui/material";
 
 const JobItem = ({ job }) => {
   return (
-    <Card sx={{ maxHeight: 145 }}>
-      <CardActionArea>
-        <CardContent>
-          <Link to={`/jobs/${job._id}`}>
+    <Card sx={{ maxHeight: 200 }}>
+      <Link
+        style={{ color: "black", textDecoration: "none" }}
+        to={`/jobs/${job._id}`}
+      >
+        <CardActionArea>
+          <CardContent sx={{ p: "10px" }}>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography
+                sx={{ fontSize: 18, fontWeight: "bold" }}
+                align="left"
+                variant="h2"
+                gutterBottom
+              >
+                {job.position.length > 30
+                  ? job.position.slice(0, 30) + "..."
+                  : job.position}
+              </Typography>
+              <Typography
+                sx={{ fontSize: 18, fontWeight: "bold", fontStyle: "italic" }}
+                align="right"
+                variant="h2"
+                gutterBottom
+              >
+                {moment().to(job.created)}
+              </Typography>
+            </Stack>
             <Typography
               sx={{ fontSize: 18 }}
               align="left"
               variant="h2"
               gutterBottom
             >
-              {job.position}
+              {job.companyName}
             </Typography>
-          </Link>
-          <Typography
-            sx={{ fontSize: 18 }}
-            align="left"
-            variant="h2"
-            gutterBottom
-          >
-            {job.companyName} - {job.location}
-          </Typography>
-          <Typography
-            sx={{ fontSize: 14 }}
-            align="left"
-            variant="h2"
-            color="text.secondary"
-            gutterBottom
-          >
-            {job.jobDescriptionText.slice(0, 200)}
-          </Typography>
-        </CardContent>
-      </CardActionArea>
+            <Typography
+              sx={{ fontSize: 18 }}
+              align="left"
+              variant="h2"
+              gutterBottom
+            >
+              {job.location}
+            </Typography>
+            <Typography sx={{ fontSize: 14 }} align="left" variant="h2">
+              {job.jobDescriptionText.slice(0, 100) + "..."}
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Link>
     </Card>
   );
 };
