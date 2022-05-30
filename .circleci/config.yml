@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: circleci/node:12
 
-    working_directory: ~/JobCrawler
+    working_directory: ~/Simple-Job-Crawler
 
     steps:
       - checkout
@@ -15,7 +15,7 @@ jobs:
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
 
-      - run: npm install
+      - run: npm install && npm run install-client
 
       - save_cache:
           paths:
