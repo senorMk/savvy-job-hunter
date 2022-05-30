@@ -1,5 +1,5 @@
 <h1 align="center">
-💼 Job Crawler
+💼 Simple Job Crawler
 </h1>
 <p align="center">
 Simple Job Crawler. Stack: MongoDB, Expressjs, React, NodeJS
@@ -14,7 +14,7 @@ Simple Job Crawler. Stack: MongoDB, Expressjs, React, NodeJS
    </a>
 </p>
 
-Job Crawler is a simple job aggregator that sources it's listings from Zambian job boards that use the free WP Job Manager plugin.
+Job Crawler is a simple job aggregator that sources it's listings from Zambian job boards that use the free [WP Job Manager](https://wordpress.org/plugins/wp-job-manager/) plugin.
 
 ## clone or download
 
@@ -33,7 +33,7 @@ client/
 ...
 ```
 
-# Usage (run fullstack app on your machine)
+# Usage
 
 ## Prerequisites
 
@@ -57,11 +57,11 @@ $ npm run dev       // run the react development server and nodemon concurrently
 
 Suggestions: to run in production mode, firstly create a .env file at the root level and specify the following:
 
-> Database credentials: dbUser, dbHost, dbPass, dbPort, dbName
-> Server listening port: PORT
-> Maximum jobs to crawl per round: MAX_CRAWL_JOBS
-> Maximum jobs to request per page: JOBS_PER_PAGE
-> Duration between crawls: MINS_PER_CRAWL
+- Database credentials: dbUser, dbHost, dbPass, dbPort, dbName
+- Server listening port: PORT
+- Maximum jobs to crawl per round: MAX_CRAWL_JOBS
+- Maximum jobs to request per page: JOBS_PER_PAGE
+- Duration between crawls: MINS_PER_CRAWL
 
 Execute the following commands at the root level folder(ideally you could also use something like pm2 or forver for the last command):
 
@@ -69,6 +69,7 @@ Execute the following commands at the root level folder(ideally you could also u
 $ npm install
 $ npm run install-client && npm run build // install the client and build it for production
 $ npm run start // start the production node instance
+```
 
 ## Standard
 
@@ -78,7 +79,7 @@ $ npm run start // start the production node instance
 
 [Create new Issues](https://github.com/senorMk/JobCrawler/issues) (preferred)
 
-Email Me: mkandawire15@gmail.com
+[Email Me](mailto:mkandawire15@gmail.com)
 
 ## Author
 
@@ -87,4 +88,3 @@ Email Me: mkandawire15@gmail.com
 ### License
 
 [MIT](https://github.com/senorMk/JobCrawler/blob/master/LICENSE)
-```
