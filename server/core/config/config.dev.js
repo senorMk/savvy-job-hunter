@@ -16,7 +16,10 @@ config.dbHost = process.env.dbHost;
 config.dbPass = process.env.dbPass;
 config.dbPort = process.env.dbPort;
 config.dbName = process.env.dbName;
-config.dbConnectUrl = `mongodb+srv://${config.dbUser}:${config.dbPass}@${config.dbHost}/${config.dbName}?retryWrites=true&w=majority`;
+config.dbNameDebug = process.env.dbNameDebug;
+config.dbConnectUrl = config.isProduction
+  ? `mongodb+srv://${config.dbUser}:${config.dbPass}@${config.dbHost}/${config.dbName}?retryWrites=true&w=majority`
+  : `mongodb+srv://${config.dbUser}:${config.dbPass}@${config.dbHost}/${config.dbNameDebug}?retryWrites=true&w=majority`;
 config.serverPort = process.env.PORT;
 config.maxCrawlJobs = process.env.MAX_CRAWL_JOBS || 10;
 config.jobsPerPage = process.env.JOBS_PER_PAGE || 10;
