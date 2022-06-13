@@ -5,10 +5,12 @@ import JobsModel from "../models/jobs.model.js";
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import CronJob from "cron";
+import PQueue from "p-queue";
 
+const scanQueue = new PQueue({ concurrency: 1 });
 Mongoose.Promise = global.Promise;
 
-const doScanJobs = async () => {
+const doScanJobs = async (site) => {
   try {
     puppeteer.use(StealthPlugin());
 
@@ -43,7 +45,7 @@ const doScanJobs = async () => {
           try {
             // Initial load
             let response = await page.goto(
-              `https://gozambiajobs.com/jm-ajax/get_listings/?&per_page=${jobsPerPage}&page=${i}`,
+              `${site}/jm-ajax/get_listings/?&per_page=${jobsPerPage}&page=${i}`,
               {
                 waitUntil: "networkidle2",
               }
@@ -134,10 +136,14 @@ const doScanJobs = async () => {
   }
 };
 
+let Websites = ["https://gozambiajobs.com", "https://jobsearchzm.com"];
+
 const scanJobs = new CronJob.CronJob(
   `*/${config.minsPerCrawl} * * * *`,
   async () => {
-    await doScanJobs();
+    Websites.forEach(async (site) => {
+      await scanQueue.add(async () => await doScanJobs(site));
+    });
   }
 );
 
