@@ -127,7 +127,8 @@ const doScanJobs = async (site) => {
               });
             } else {
               logger.info("Response not okay.");
-              logger.info("Status: " + response.statusText());
+              logger.info("Status: " + response.status());
+              logger.info("Status text: " + response.statusText());
             }
           } catch (error) {
             console.log(error);
