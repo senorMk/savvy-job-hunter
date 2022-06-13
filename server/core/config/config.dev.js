@@ -24,9 +24,6 @@ config.serverPort = process.env.PORT;
 config.maxCrawlJobs = process.env.MAX_CRAWL_JOBS || 10;
 config.jobsPerPage = process.env.JOBS_PER_PAGE || 10;
 config.minsPerCrawl = process.env.MINS_PER_CRAWL || 10;
-config.userAgent =
-  process.env.USER_AGENT ||
-  "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
 config.frontDir = path.resolve(
   path.join(__dirname, "../../../client/build/index.html")
 );

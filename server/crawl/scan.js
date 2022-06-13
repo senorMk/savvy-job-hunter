@@ -6,6 +6,8 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import CronJob from "cron";
 import PQueue from "p-queue";
+import FingerprintGenerator from "fingerprint-generator";
+import { FingerprintInjector } from "fingerprint-injector";
 
 const scanQueue = new PQueue({ concurrency: 1 });
 Mongoose.Promise = global.Promise;
@@ -13,6 +15,15 @@ Mongoose.Promise = global.Promise;
 const doScanJobs = async (site) => {
   try {
     puppeteer.use(StealthPlugin());
+
+    const fingerprintInjector = new FingerprintInjector();
+
+    const fingerprintGenerator = new FingerprintGenerator({
+      devices: ["desktop"],
+      browsers: [{ name: "chrome", minVersion: 88 }],
+    });
+
+    const { fingerprint } = fingerprintGenerator.getFingerprint();
 
     puppeteer
       .launch({
@@ -24,9 +35,14 @@ const doScanJobs = async (site) => {
 
         const page = (await browser.pages())[0];
 
+        // Attach fingerprint to page
+        await fingerprintInjector.attachFingerprintToPuppeteer(
+          page,
+          fingerprint
+        );
+
         await page.setJavaScriptEnabled(true);
         await page.setDefaultNavigationTimeout(0);
-        await page.setUserAgent(config.userAgent);
 
         const jobListingItem = "job_listing";
 
@@ -51,7 +67,6 @@ const doScanJobs = async (site) => {
 
             if (response.ok()) {
               let json = await response.json();
-              let text = await response.text();
 
               let html = json.html;
 
@@ -150,7 +165,7 @@ const scanJobs = new CronJob.CronJob(
   `*/${config.minsPerCrawl} * * * *`,
   async () => {
     Websites.forEach(async (site) => {
-      await scanQueue.add(async () => await doScanJobs(site));
+      await doScanJobs(site);
     });
   }
 );
