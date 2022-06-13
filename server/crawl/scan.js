@@ -26,9 +26,7 @@ const doScanJobs = async (site) => {
 
         await page.setJavaScriptEnabled(true);
         await page.setDefaultNavigationTimeout(0);
-        await page.setUserAgent(
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
-        );
+        await page.setUserAgent(config.userAgent);
 
         const jobListingItem = "job_listing";
 
@@ -129,6 +127,7 @@ const doScanJobs = async (site) => {
               logger.info("Response not okay.");
               logger.info("Status: " + response.status());
               logger.info("Status text: " + response.statusText());
+              logger.info("Actual response: " + response.text());
             }
           } catch (error) {
             console.log(error);
