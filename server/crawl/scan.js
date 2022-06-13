@@ -127,7 +127,7 @@ const doScanJobs = async (site) => {
               logger.info("Response not okay.");
               logger.info("Status: " + response.status());
               logger.info("Status text: " + response.statusText());
-              console.log("Actual response: ", response);
+              logger.info("Failed to crawl: " + site);
             }
           } catch (error) {
             console.log(error);
