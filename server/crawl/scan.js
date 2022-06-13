@@ -127,7 +127,7 @@ const doScanJobs = async (site) => {
               logger.info("Response not okay.");
               logger.info("Status: " + response.status());
               logger.info("Status text: " + response.statusText());
-              logger.info("Actual response: " + response);
+              console.log("Actual response: ", response);
             }
           } catch (error) {
             console.log(error);
