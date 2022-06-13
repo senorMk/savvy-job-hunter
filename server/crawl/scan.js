@@ -21,9 +21,12 @@ const doScanJobs = async (site) => {
     const fingerprintGenerator = new FingerprintGenerator({
       devices: ["desktop"],
       browsers: [{ name: "chrome", minVersion: 88 }],
+      operatingSystems: ["linux"],
     });
 
-    const { fingerprint } = fingerprintGenerator.getFingerprint();
+    const { fingerprint } = fingerprintGenerator.getFingerprint({
+      locales: ["en-US", "en"],
+    });
 
     puppeteer
       .launch({
