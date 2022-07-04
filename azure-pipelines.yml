@@ -37,15 +37,11 @@ steps:
   - task: CmdLine@2
     inputs:
       script: |
-      rm -r -f client/node_modules
-      
-      rm -r -f client/src
-      
-      rm -r -f client/public
-
-      rm -f client/package-lock.json
-
-      rm -f client/package.json
+        rm -r -f client/node_modules
+        rm -r -f client/src
+        rm -r -f client/public
+        rm -f client/package-lock.json
+        rm -f client/package.json
     displayName: 'Delete client junk files'
 
   - task: ArchiveFiles@2
