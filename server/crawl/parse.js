@@ -77,7 +77,7 @@ const doParseJobs = async () => {
                   } catch (err) {
                     Response.Text = '';
                     Response.Html = '';
-                    logger.info('Error: ' + err);
+                    console.log('Error: ', err);
                     return Response;
                   }
 
