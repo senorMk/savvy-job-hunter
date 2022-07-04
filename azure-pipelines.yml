@@ -9,8 +9,8 @@ trigger:
 pool:
   vmImage: ubuntu-latest
 
-# variables:
-# - group: simple-job-crawler
+variables:
+- group: simple-job-crawler
 
 steps:
   - task: NodeTool@0
@@ -25,7 +25,15 @@ steps:
     
   - task: CmdLine@2
     inputs:
-      script: 'echo -e "dbUser=$(dbUser)\ndbHost=$(dbHost)\ndbPass=$(dbPass)\ndbPort=$(dbPort)\ndbName=$(dbName)\nMAX_CRAWL_JOBS=$(MAX_CRAWL_JOBS)\nJOBS_PER_PAGE=$(JOBS_PER_PAGE)\nMINS_PER_CRAWL=$(MINS_PER_CRAWL)" >> .env'
+      script: |
+        echo -e "dbUser=$(dbUser)\n" >> .env
+        echo -e "dbHost=$(dbHost)\n" >> .env
+        echo -e "dbPass=$(dbPass)\n" >> .env
+        echo -e "dbPort=$(dbPort)\n" >> .env
+        echo -e "dbName=$(dbName)\n" >> .env
+        echo -e "MAX_CRAWL_JOBS=$(MAX_CRAWL_JOBS)\n" >> .env
+        echo -e "JOBS_PER_PAGE=$(JOBS_PER_PAGE)\n" >> .env
+        echo -e "MINS_PER_CRAWL=$(MINS_PER_CRAWL)\n" >> .env
     displayName: 'Setting server environment variables'
 
   - script: |
