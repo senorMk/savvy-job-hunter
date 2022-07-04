@@ -1,23 +1,23 @@
-import Mongoose from "mongoose";
-import logger from "../core/logger/app-logger.js";
-import config from "../core/config/config.dev.js";
-import JobsModel from "../models/jobs.model.js";
-import puppeteer from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import CronJob from "cron";
+import Mongoose from 'mongoose';
+import logger from '../core/logger/app-logger.js';
+import config from '../core/config/config.dev.js';
+import JobsModel from '../models/jobs.model.js';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import CronJob from 'cron';
 
 Mongoose.Promise = global.Promise;
 
 const doParseJobs = async () => {
   try {
-    logger.info("Processing job.");
+    logger.info('Processing job.');
 
     puppeteer.use(StealthPlugin());
 
     let res = puppeteer
       .launch({
         headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox", "--log-level=1"],
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--log-level=1'],
       })
       .then(async (browser) => {
         const page = await browser.newPage();
@@ -25,10 +25,10 @@ const doParseJobs = async () => {
         await page.setJavaScriptEnabled(true);
         await page.setDefaultNavigationTimeout(0);
         await page.setUserAgent(
-          "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36"
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36'
         );
 
-        logger.info("Searching db.");
+        logger.info('Searching db.');
 
         // Lookup in database
         let pageNo = 1;
@@ -53,31 +53,39 @@ const doParseJobs = async () => {
               }
 
               if (found_job.verified) {
-                logger.error("Already verified job: " + err);
+                logger.error('Already verified job: ' + err);
                 return;
               }
 
               if (found_job) {
-                const jobDescriptionItem = "div.job_description";
+                const jobDescriptionItem = 'div.job_description';
 
                 await page.goto(found_job.link, {
-                  waitUntil: "networkidle2",
+                  waitUntil: 'networkidle2',
                 });
 
-                logger.info("Querying.");
+                logger.info('Querying.');
 
                 let Description = await page.evaluate((jobDescriptionItem) => {
                   let Response = {};
-                  Response.Text =
-                    document.querySelector(jobDescriptionItem).innerText;
-                  Response.Html =
-                    document.querySelector(jobDescriptionItem).innerHTML;
+
+                  try {
+                    Response.Text =
+                      document.querySelector(jobDescriptionItem).innerText;
+                    Response.Html =
+                      document.querySelector(jobDescriptionItem).innerHTML;
+                  } catch (err) {
+                    Response.Text = '';
+                    Response.Html = '';
+                    logger.info('Error: ' + err);
+                    return Response;
+                  }
 
                   return Response;
                 }, jobDescriptionItem);
 
                 if (Description.Text && Description.Html) {
-                  logger.info("Updating job: " + found_job.position);
+                  logger.info('Updating job: ' + found_job.position);
 
                   JobsModel.updateOne(
                     { _id: found_job._id },
@@ -92,17 +100,17 @@ const doParseJobs = async () => {
                     function (err) {
                       if (err) {
                         logger.error(
-                          "Failed to update job: " + found_job.position
+                          'Failed to update job: ' + found_job.position
                         );
                         return;
                       }
                     }
                   );
                 } else {
-                  logger.info("Invalid description.");
+                  logger.info('Invalid description.');
                 }
               } else {
-                logger.info("Could not find any jobs without a description.");
+                logger.info('Could not find any jobs without a description.');
               }
             }
           }
@@ -110,7 +118,7 @@ const doParseJobs = async () => {
 
         await browser.close();
 
-        logger.info("Done processing this loop.");
+        logger.info('Done processing this loop.');
       });
   } catch (err) {
     logger.error(err);
