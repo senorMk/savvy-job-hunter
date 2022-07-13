@@ -87,4 +87,48 @@ JobsModel.getAll = async (req, res) => {
   }
 };
 
+JobsModel.addJob = (jobToAdd) => {
+  let newJob = new JobsModel();
+
+  newJob.link = jobToAdd.link;
+  newJob.companyLogo = jobToAdd.companyLogo;
+  newJob.companyLogoAlt = jobToAdd.companyLogoAlt;
+  newJob.position = jobToAdd.position;
+  newJob.companyName = jobToAdd.companyName;
+  newJob.location = jobToAdd.location;
+  newJob.jobType = jobToAdd.jobType;
+  newJob.dateOpen = jobToAdd.dateOpen;
+  newJob.dateClosed = jobToAdd.dateClosed;
+  newJob.verified = jobToAdd.verified;
+
+  newJob.save(function (err) {
+    if (err) {
+      logger.error('Failed to save job: ' + newJob.position);
+      return;
+    }
+  });
+};
+
+JobsModel.removeJob = (jobToDelete) => {
+  JobsModel.deleteOne(
+    {
+      link: jobToDelete.link,
+      companyLogo: jobToDelete.companyLogo,
+      companyLogoAlt: jobToDelete.companyLogoAlt,
+      position: jobToDelete.position,
+      companyName: jobToDelete.companyName,
+      location: jobToDelete.location,
+      jobType: jobToDelete.jobType,
+      date: jobToDelete.date,
+      verified: jobToDelete.verified,
+    },
+    function (err) {
+      if (err) {
+        logger.error('Failed to delete job: ' + jobToDelete.position);
+        return;
+      }
+    }
+  );
+};
+
 export default JobsModel;
