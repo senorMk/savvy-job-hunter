@@ -4,6 +4,7 @@ npm-debug.log
 
 /.idea
 /public
+/coverage
 
 .env
 .passport.js
