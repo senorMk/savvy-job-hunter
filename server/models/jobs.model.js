@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import logger from "../core/logger/app-logger.js";
+import mongoose from 'mongoose';
+import logger from '../core/logger/app-logger.js';
 
 const JobSchema = mongoose.Schema({
   link: String,
@@ -17,110 +17,74 @@ const JobSchema = mongoose.Schema({
   created: { type: Date, default: Date.now },
 });
 
-let JobsModel = mongoose.model("Job", JobSchema);
+let JobsModel = mongoose.model('Job', JobSchema);
 
 JobsModel.getById = async (req, res) => {
-  JobsModel.findById(req.params.jobId, function (err, job) {
-    if (err) {
-      res.status(500).send(err);
-    }
+  try {
+    let job = await JobsModel.findById(req.params.jobId);
 
-    if (!job) {
-      res.status(400).send("No job found!");
-    }
-
-    res.send(job);
-  });
+    res.status(200).json({ message: 'Job found!', data: job, success: true });
+  } catch (err) {
+    logger.error('Failed to get job: ' + req.params.jobId);
+    return res
+      .status(500)
+      .json({ message: 'Failed to get job', success: false });
+  }
 };
 
 JobsModel.getAll = async (req, res) => {
   let pageNo = parseInt(req.query.pageNo);
   let size = parseInt(req.query.size);
+  let position = req.query.position;
+  let companyName = req.query.companyName;
+  let location = req.query.location;
   let query = {};
+  let filter = { verified: true };
+
+  if (position) {
+    filter.position = { $regex: position };
+  }
+
+  if (companyName) {
+    filter.companyName = companyName;
+  }
+
+  if (location) {
+    filter.location = location;
+  }
 
   if (pageNo < 0 || pageNo === 0) {
-    response = {
-      error: true,
-      message: "invalid page number, should start with 1",
-    };
-    return res.json(response);
+    logger.error('Received invalid page number: ' + pageNo);
+    return res.status(400).json({
+      message: 'invalid page number, should start with 1',
+      success: false,
+    });
   }
   query.skip = size * (pageNo - 1);
   query.limit = size;
 
-  let response = await JobsModel.countDocuments({ verified: true }).then(
-    async function (totalCount, error) {
-      let response = {};
+  try {
+    let totalCount = await JobsModel.countDocuments(filter).exec();
+    let jobs = await JobsModel.find(filter, {}, query)
+      .sort({ dateOpen: 'desc' })
+      .exec();
 
-      if (error) {
-        response = { error: true, message: "Error counting documents data" };
-        res.json(response);
-      }
+    let totalPages = Math.ceil(totalCount / size);
 
-      JobsModel.find({ verified: true }, {}, query, function (err, data) {
-        let response = {};
-        if (err) {
-          response = { error: true, message: "Error fetching data" };
-        } else {
-          let totalPages = Math.ceil(totalCount / size);
-          response = {
-            error: false,
-            message: data,
-            pages: totalPages,
-            count: totalCount,
-          };
-        }
-
-        res.json(response);
-      }).sort({ created: "desc" });
-    }
-  );
-
-  return response;
-};
-
-JobsModel.addJob = (jobToAdd) => {
-  let newJob = new JobsModel();
-
-  newJob.link = jobToAdd.link;
-  newJob.companyLogo = jobToAdd.companyLogo;
-  newJob.companyLogoAlt = jobToAdd.companyLogoAlt;
-  newJob.position = jobToAdd.position;
-  newJob.companyName = jobToAdd.companyName;
-  newJob.location = jobToAdd.location;
-  newJob.jobType = jobToAdd.jobType;
-  newJob.dateOpen = jobToAdd.dateOpen;
-  newJob.dateClosed = jobToAdd.dateClosed;
-  newJob.verified = jobToAdd.verified;
-
-  newJob.save(function (err) {
-    if (err) {
-      logger.error("Failed to save job: " + newJob.position);
-      return;
-    }
-  });
-};
-
-JobsModel.removeJob = (jobToDelete) => {
-  JobsModel.deleteOne(
-    {
-      link: jobToDelete.link,
-      companyLogo: jobToDelete.companyLogo,
-      companyLogoAlt: jobToDelete.companyLogoAlt,
-      position: jobToDelete.position,
-      companyName: jobToDelete.companyName,
-      location: jobToDelete.location,
-      jobType: jobToDelete.jobType,
-      date: jobToDelete.date,
-      verified: jobToDelete.verified,
-    },
-    function (err) {
-      if (err) {
-        logger.error("Failed to delete job: " + jobToDelete.position);
-        return;
-      }
-    }
-  );
+    return res.status(200).json({
+      message: 'Jobs found!',
+      pages: totalPages,
+      data: jobs,
+      count: totalCount,
+      success: true,
+    });
+  } catch (error) {
+    logger.error('Error counting & finding documents: ' + error);
+    return res.json({
+      message: 'Error counting & finding documents',
+      success: false,
+    });
+  }
 };
 
 export default JobsModel;
