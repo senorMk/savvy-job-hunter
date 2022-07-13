@@ -1,28 +1,30 @@
 <h1 align="center">
-💼 Simple Job Crawler
+💼 Savvy Job Hunter
 </h1>
 <p align="center">
-Simple Job Crawler. Stack: MongoDB, Expressjs, React, NodeJS
+Stack: MongoDB, Expressjs, React, NodeJS
 </p>
 
 <p align="center">
-   <a href="https://github.com/senorMk/JobCrawler/blob/master/LICENSE">
+   <a href="https://github.com/senorMk/savvy-job-hunter/blob/master/LICENSE">
       <img src="https://img.shields.io/badge/License-MIT-green.svg" />
    </a>
-   <a href="https://circleci.com/gh/senorMk/Simple-Job-Crawler">
-      <img src="https://circleci.com/gh/senorMk/Simple-Job-Crawler.svg?style=svg" />
+   <a href="https://circleci.com/gh/senorMk/savvy-job-hunter">
+      <img src="https://circleci.com/gh/senorMk/savvy-job-hunter.svg?style=svg" />
    </a>
 </p>
 
-Job Crawler is a simple job aggregator that sources it's listings from Zambian job boards that use the free [WP Job Manager](https://wordpress.org/plugins/wp-job-manager/) plugin.
+Savvy Job Hunter is a more than just a simple job aggregator.
 
-## clone or download
+It sources it's listings from job boards that use the free [WP Job Manager](https://wordpress.org/plugins/wp-job-manager/) plugin and allows you to gain additional insight on any job listing.
+
+## Clone
 
 ```terminal
 $ git clone https://github.com/senorMk/JobCrawler.git
 ```
 
-## project structure
+## Project Structure
 
 ```terminal
 LICENSE
@@ -32,8 +34,6 @@ client/
    package.json
 ...
 ```
-
-# Usage
 
 ## Prerequisites
 
@@ -71,15 +71,9 @@ $ npm run install-client && npm run build // install the client and build it for
 $ npm run start // start the production node instance
 ```
 
-## Standard
-
-[![JavaScript Style Guide](https://cdn.rawgit.com/standard/standard/master/badge.svg)](https://github.com/standard/standard)
-
-## BUGs or comments
+## Issues
 
 [Create new Issues](https://github.com/senorMk/JobCrawler/issues) (preferred)
-
-[Email Me](mailto:mkandawire15@gmail.com)
 
 ## Author
 
