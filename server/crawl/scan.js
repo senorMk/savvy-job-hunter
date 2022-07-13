@@ -1,13 +1,13 @@
-import Mongoose from "mongoose";
-import logger from "../core/logger/app-logger.js";
-import config from "../core/config/config.dev.js";
-import JobsModel from "../models/jobs.model.js";
-import puppeteer from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import CronJob from "cron";
-import PQueue from "p-queue";
-import FingerprintGenerator from "fingerprint-generator";
-import { FingerprintInjector } from "fingerprint-injector";
+import Mongoose from 'mongoose';
+import logger from '../core/logger/app-logger.js';
+import config from '../core/config/config.dev.js';
+import JobsModel from '../models/jobs.model.js';
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
+import CronJob from 'cron';
+import PQueue from 'p-queue';
+import FingerprintGenerator from 'fingerprint-generator';
+import { FingerprintInjector } from 'fingerprint-injector';
 
 const scanQueue = new PQueue({ concurrency: 1 });
 Mongoose.Promise = global.Promise;
@@ -19,22 +19,22 @@ const doScanJobs = async (site) => {
     const fingerprintInjector = new FingerprintInjector();
 
     const fingerprintGenerator = new FingerprintGenerator({
-      devices: ["desktop"],
-      browsers: [{ name: "chrome", minVersion: 88 }],
-      operatingSystems: ["linux"],
+      devices: ['desktop'],
+      browsers: [{ name: 'chrome', minVersion: 88 }],
+      operatingSystems: ['linux'],
     });
 
     const { fingerprint } = fingerprintGenerator.getFingerprint({
-      locales: ["en-US", "en"],
+      locales: ['en-US', 'en'],
     });
 
     puppeteer
       .launch({
         headless: true,
-        args: ["--no-sandbox", "--disable-setuid-sandbox", "--log-level=1"],
+        args: ['--no-sandbox', '--disable-setuid-sandbox', '--log-level=1'],
       })
       .then(async (browser) => {
-        logger.info("Crawling jobs...");
+        logger.info('Crawling jobs...');
 
         const page = (await browser.pages())[0];
 
@@ -47,16 +47,16 @@ const doScanJobs = async (site) => {
         await page.setJavaScriptEnabled(true);
         await page.setDefaultNavigationTimeout(0);
 
-        const jobListingItem = "job_listing";
+        const jobListingItem = 'job_listing';
 
         // Parsing
         const maxCrawlJobs = config.maxCrawlJobs;
         const jobsPerPage = config.jobsPerPage;
         const loops = maxCrawlJobs / jobsPerPage;
 
-        logger.info("Starting crawl.");
-        logger.info("Checking the most recent: " + maxCrawlJobs);
-        logger.info("At a rate of: " + jobsPerPage);
+        logger.info('Starting crawl.');
+        logger.info('Checking the most recent: ' + maxCrawlJobs);
+        logger.info('At a rate of: ' + jobsPerPage);
 
         for (let i = 1; i <= loops; i++) {
           try {
@@ -64,7 +64,7 @@ const doScanJobs = async (site) => {
             let response = await page.goto(
               `${site}/jm-ajax/get_listings/?&per_page=${jobsPerPage}&page=${i}`,
               {
-                waitUntil: "networkidle2",
+                waitUntil: 'networkidle2',
               }
             );
 
@@ -83,26 +83,26 @@ const doScanJobs = async (site) => {
                 let CleanArray = [];
 
                 Jobs.forEach(async (job) => {
-                  let link = job.querySelector("a").getAttribute("href");
+                  let link = job.querySelector('a').getAttribute('href');
                   let companyLogo = job
-                    .querySelector("img")
-                    .getAttribute("src");
+                    .querySelector('img')
+                    .getAttribute('src');
                   let companyLogoAlt = job
-                    .querySelector("img")
-                    .getAttribute("alt");
+                    .querySelector('img')
+                    .getAttribute('alt');
                   let position = job
-                    .querySelector("div.position > h3")
-                    .innerHTML.replace(/&amp;/g, "&");
+                    .querySelector('div.position > h3')
+                    .innerHTML.replace(/&amp;/g, '&');
                   let companyName = job.querySelector(
-                    "div.position > div.company > strong"
+                    'div.position > div.company > strong'
                   ).innerHTML;
-                  let location = job.querySelector("div.location").innerText;
+                  let location = job.querySelector('div.location').innerText;
                   let jobType = job.querySelector(
-                    "ul.meta > li.job-type"
+                    'ul.meta > li.job-type'
                   ).innerText;
                   let dateOpen = job
-                    .querySelector("ul.meta > li.date > time")
-                    .getAttribute("datetime");
+                    .querySelector('ul.meta > li.date > time')
+                    .getAttribute('datetime');
                   let verified = false;
 
                   let new_job = {
@@ -117,7 +117,7 @@ const doScanJobs = async (site) => {
                     verified,
                   };
 
-                  if (jobType !== "Advert") {
+                  if (jobType !== 'Advert') {
                     CleanArray.push(new_job);
                   }
                 });
@@ -132,7 +132,7 @@ const doScanJobs = async (site) => {
                     link: job.link,
                     companyName: job.companyName,
                     position: job.position,
-                    date: Date.parse(job.date),
+                    dateOpen: Date.parse(job.dateOpen),
                   },
                   async function (err, job_res) {
                     if (!job_res) {
@@ -142,10 +142,10 @@ const doScanJobs = async (site) => {
                 );
               });
             } else {
-              logger.info("Response not okay.");
-              logger.info("Status: " + response.status());
-              logger.info("Status text: " + response.statusText());
-              logger.info("Failed to crawl: " + site);
+              logger.info('Response not okay.');
+              logger.info('Status: ' + response.status());
+              logger.info('Status text: ' + response.statusText());
+              logger.info('Failed to crawl: ' + site);
             }
           } catch (error) {
             console.log(error);
@@ -155,14 +155,14 @@ const doScanJobs = async (site) => {
 
         await browser.close();
 
-        logger.info("Crawl session done.");
+        logger.info('Crawl session done.');
       });
   } catch (err) {
     logger.error(err);
   }
 };
 
-let Websites = ["https://gozambiajobs.com", "https://jobsearchzm.com"];
+let Websites = ['https://gozambiajobs.com', 'https://jobsearchzm.com'];
 
 const scanJobs = new CronJob.CronJob(
   `*/${config.minsPerCrawl} * * * *`,
