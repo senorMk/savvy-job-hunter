@@ -9,10 +9,13 @@ const Header = () => {
         sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
       >
         <WorkIcon sx={{ color: '#a66e58', fontSize: '40px' }} />
-        <Typography variant="h1" sx={{ fontSize: 40 }}>
+        <Typography variant="h1" sx={{ fontSize: 40, textAlign: 'center' }}>
           Savvy Job Hunter
         </Typography>
-        <Typography variant="h2" sx={{ fontSize: 20 }}>
+        <Typography
+          variant="h2"
+          sx={{ fontSize: 20, textAlign: 'center', marginTop: '10px' }}
+        >
           Powered by lots of real data...
         </Typography>
       </Box>
