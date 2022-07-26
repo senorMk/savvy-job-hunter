@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import Axios from 'axios';
 import config from '../config';
-import { Box, Container, Stack, Grid } from '@mui/material';
+import { Box, Container, Grid } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import InfiniteScroll from 'react-infinite-scroller';
 import JobItem from '../components/JobItem';
@@ -53,9 +53,9 @@ const JobsPage = () => {
   return (
     <Container maxWidth="false">
       <InfiniteScroll loadMore={fetchMore} hasMore={true} loader={loader}>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} columns={{ xs: 2, sm: 8, md: 12, lg: 12 }}>
           {jobsList.map((job) => (
-            <Grid item xs={2} sm={4} md={4} key={job._id}>
+            <Grid item xs={2} sm={4} md={4} lg={3} key={job._id}>
               <JobItem key={job._id} job={job} />
             </Grid>
           ))}
