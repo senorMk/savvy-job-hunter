@@ -30,8 +30,8 @@ const JobItem = ({ job }) => {
                 variant="h2"
                 gutterBottom
               >
-                {job.position.length > 30
-                  ? job.position.slice(0, 30) + '...'
+                {job.position.length > 20
+                  ? job.position.slice(0, 20) + '...'
                   : job.position}
               </Typography>
               <Typography
@@ -49,7 +49,9 @@ const JobItem = ({ job }) => {
               variant="h2"
               gutterBottom
             >
-              {job.companyName}
+              {job.companyName.length > 20
+                ? job.companyName.slice(0, 20) + '...'
+                : job.companyName}
             </Typography>
             <Typography
               sx={{ fontSize: 18 }}
