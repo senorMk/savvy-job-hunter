@@ -19,9 +19,12 @@ const doScanJobs = async (site) => {
     const fingerprintInjector = new FingerprintInjector();
 
     const fingerprintGenerator = new FingerprintGenerator({
-      devices: ['desktop'],
-      browsers: [{ name: 'chrome', minVersion: 88 }],
-      operatingSystems: ['linux'],
+      devices: ['desktop', 'mobile'],
+      browsers: [
+        { name: 'firefox', minVersion: 80 },
+        { name: 'chrome', minVersion: 88 },
+      ],
+      operatingSystems: ['linux', 'macos', 'windows', 'android', 'ios'],
     });
 
     const { fingerprint } = fingerprintGenerator.getFingerprint({
@@ -162,14 +165,10 @@ const doScanJobs = async (site) => {
   }
 };
 
-let Websites = ['https://gozambiajobs.com', 'https://jobsearchzm.com'];
-
 const scanJobs = new CronJob.CronJob(
   `*/${config.minsPerCrawl} * * * *`,
   async () => {
-    Websites.forEach(async (site) => {
-      await doScanJobs(site);
-    });
+    await doScanJobs(config.crawlSite);
   }
 );
 
