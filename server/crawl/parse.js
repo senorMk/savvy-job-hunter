@@ -108,6 +108,9 @@ const doParseJobs = async () => {
                   );
                 } else {
                   logger.info('Invalid description.');
+                  logger.info('Description text: ' + Description.Text);
+                  logger.info('Description html: ' + Description.Html);
+                  Description.Text && Description.Html;
                 }
               } else {
                 logger.info('Could not find any jobs without a description.');
