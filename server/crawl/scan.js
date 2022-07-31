@@ -165,14 +165,10 @@ const doScanJobs = async (site) => {
   }
 };
 
-let Websites = ['https://gozambiajobs.com', 'https://jobsearchzm.com'];
-
 const scanJobs = new CronJob.CronJob(
   `*/${config.minsPerCrawl} * * * *`,
   async () => {
-    Websites.forEach(async (site) => {
-      await doScanJobs(site);
-    });
+    await doScanJobs(config.crawlSite);
   }
 );
 
